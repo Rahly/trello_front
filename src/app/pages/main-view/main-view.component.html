@@ -12,7 +12,9 @@
 
     <div class="board">
         <div class="board-bar">
-            <p class="board-name">Board Name</p>
+            <p class="board-name">
+                <span (keyup)="changeValue('name', $event)" (blur)="updateList('name', $event)" contenteditable="true">Board Name</span>
+            </p>
         </div>
 
     <div class="board-wrapper">
@@ -20,7 +22,7 @@
         <div class="board-columns" cdkDropListGroup>
             <div class="board-column" *ngFor="let column of board.columns" >
                 <div class="column-title">
-                    {{ column.name }}
+                    <span (keyup)="changeValue('name', $event)" (blur)="updateList('name', $event)" contenteditable="true">{{ column.name }}</span>
                 </div>
 
                 <div class="task-container"
@@ -32,8 +34,17 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <button color="primary" matbutton>+ Dodaj kolejną listę</button>
+            
+            <div class="add-column"
+                (click)="enableAddColumn()" >
+  	            <span [style.display]="addingColumn ? 'none' : ''" >Dodaj kolejną listę</span>
+   
+                <input  
+                [style.display]="addingColumn ? '' : 'none' "
+                (keyup)="addColumnOnEnter($event)"
+                (blur)="addColumnOnBlur()"
+                (ng-Model)="addColumnText" />
+
             </div>
         </div>
     </div>

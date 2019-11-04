@@ -3,6 +3,8 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import { Board } from 'src/app/models/borard.model';
 import { Column } from 'src/app/models/column.model';
 
+declare var jQuery: any;
+
 @Component({
   selector: 'app-main-view',
   templateUrl: './main-view.component.html',
@@ -10,7 +12,11 @@ import { Column } from 'src/app/models/column.model';
 })
 export class MainViewComponent implements OnInit {
 
-  constructor() { }
+  constructor(){};
+
+  addingColumn = false;
+  addColumnText: string;
+  editField: string;
 
   board: Board = new Board('Test', [
     new Column('Ideas', [ 
@@ -27,6 +33,7 @@ export class MainViewComponent implements OnInit {
   ])
   ]);
 
+
   ngOnInit() {
   }
 
@@ -40,5 +47,53 @@ export class MainViewComponent implements OnInit {
                         event.currentIndex);
     }
   }
+
+  updateList(property: string, event: any) {
+    const editField = event.target.textContent;
+    this.board[property] = editField;
+  }
+
+  changeValue(id: number, property: string, event: any) {
+    this.editField = event.target.textContent;
+  }
+
+  enableAddColumn() {
+    this.addingColumn = true;
+    let input = jQuery('.add-column')[0]
+      .getElementsByTagName('input')[0];
+
+    setTimeout(function () { input.focus(); }, 0);
+  }
+
+  addColumnOnEnter(event: KeyboardEvent) {
+    if (event.keyCode === 13) {
+      if (this.addColumnText && this.addColumnText.trim() !== '') {
+        this.addColumn();
+      } else {
+        this.clearAddColumn();
+      }
+    }
+    else if (event.keyCode === 27) {
+      this.clearAddColumn();
+    }
+  }
+
+  addColumn() {
+    //TO DO!!!!
+  }
+
+  addColumnOnBlur() {
+    if (this.addColumnText && this.addColumnText.trim() !== '') {
+      this.addColumn();
+    }
+    this.clearAddColumn();
+  }
+
+  clearAddColumn() {
+    this.addingColumn = false;
+    this.addColumnText = '';
+  }
+
+
 
 }
